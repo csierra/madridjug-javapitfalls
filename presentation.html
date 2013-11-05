@@ -9,24 +9,27 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+		<link rel="stylesheet" href="css/theme/pitfalls.css" id="theme">
 		<!-- For syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
 		<script>
 			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
 		</script>
+		<script src="jquery-2.0.3.js"></script>
 		<style type="text/css" media="screen">
+			#editor .ace_cursor {
+				border-left: 4px white solid;
+			}
 			#editor { 
 				position: absolute;
 				top: 0;
 				right: 0;
 				bottom: 0;
-				left: 0;
+				left: -100px;
 				text-align: left;
-				height: 400px;
 				font-family: monospace;
-				cursor: text;
+				font-size: 30px;
 			}
 		</style>
 
@@ -42,10 +45,16 @@
 			<div class="slides">
 				<section data-background="java%20tripping%20hazard.png" data-background-size="70%"></section>
 				<section>
-						<div id="editor" >public static void main(String args[]) {
-
-}
-						</div>
+						<div id="editor" style="width: 1024px; height: 600px">public void store(Map<String, Object> m, String key, Object value) {
+	if (value instanceof Number) {
+		value = String.valueOf(value);
+	}
+	else if (value instanceof Boolean) {
+		value = String.valueOf(value);
+	}
+	
+	m.put(key, value);
+}</div>
 				</section>
 			</div>
 		</div>
@@ -53,8 +62,25 @@
 		<script src="ace.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			var editor = ace.edit("editor");
-			editor.setTheme("ace/theme/eclipse");
+			editor.setTheme("ace/theme/ambiance");
 			editor.getSession().setMode("ace/mode/java");
+			editor.renderer.setShowGutter(false);
+			editor.setHighlightActiveLine(false);
+			editor.commands.addCommand({
+   			 name: 'exec',
+    		 bindKey: {win: 'Ctrl-E',  mac: 'Command-E'},
+    		 exec: function(editor) {
+			 	$.ajax({
+					url: 'http://localhost:8000/execute',
+					type: 'POST',
+					data: {expression: editor.getValue()},
+					success: function(e) {
+						debugger;
+					}
+			 })
+    		},
+    		readOnly: true // false if this command should not apply in readOnly mode
+			});
 		</script>
 
 		<script src="lib/js/head.min.js"></script>
