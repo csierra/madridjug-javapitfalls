@@ -21,7 +21,7 @@
 			#editor .ace_cursor {
 				border-left: 4px white solid;
 			}
-			#editor { 
+			section div.editor { 
 				position: absolute;
 				top: 0;
 				right: 0;
@@ -29,8 +29,15 @@
 				left: -100px;
 				text-align: left;
 				font-family: monospace;
-				font-size: 30px;
-			}
+                                font-size: 30px;
+                                height: 400px;
+                                width: 1024px;
+                                margin-left: 60px;
+
+                        }
+                        section div.overcode {
+                            margin-top: -200px;
+                        }
 		</style>
 
 		<!--[if lt IE 9]>
@@ -44,24 +51,70 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section data-background="java%20tripping%20hazard.png" data-background-size="70%"></section>
-				<section>
-						<div id="editor" style="width: 1024px; height: 600px">public void store(Map<String, Object> m, String key, Object value) {
-	if (value instanceof Number) {
-		value = String.valueOf(value);
-	}
-	else if (value instanceof Boolean) {
-		value = String.valueOf(value);
-	}
-	
-	m.put(key, value);
+                                <section>
+                                <section>
+                                    <h1>Varianza en arrays</h1>
+                                
+                                    </section>
+                                    <section>
+                                        <h2>Problemas de los arrays</h2>
+                                        <ul>
+                                            <li>Contravariantes en asignación</li>
+                                            <li>Covariantes en los elementos</li>
+                                            <li>Motivaciones históricas anteriores a los genéricos</li>
+                                        </ul>
+                                    </section>
+                                    <section>
+                                    <div class="overcode">Para poder hacer funciones que trabajaran genéricamente sobre los arrays cualquier tipo de array debía ser asignable a Object[]</div>
+                                    <div class="editor">public static boolean binarySearch(Object[] haystack, Object needle) {
+    // ... aquí magia
+}
+
+public static void main(String args[]) {
+    binarySearch({"a", "b", "c"}, "c"); //<-- Esto tenía que funcionar
+}
+</div>
+                                    </section>
+                                    <section>
+                                        <div class="overcode">Los arrays también deben permitir asignar subclases del tipo como elementos</div>
+                                        <div id="editor2" class="editor">Number[] numeros = new Number[3];
+
+numeros[0] = 1;
+numeros[1] = 1.1;
+numeros[2] = 10l;
+
+System.out.println(Arrays.toString(numeros));</div>
+                                    </section>
+                                    <section>
+                                        <div class="overcode">Lo que nos lleva a la siguiente situación... que compila perfectamente </div>
+                                        <div id="editor3" class="editor">String[] strings = {"a", "b", "c"};
+
+Object[] objects = strings;
+
+objects[2] = 10; // !!!</div>
+                                    </section>
+                                </section>
+                                <section>
+                                    <section>
+                                        <div id="editor4" style="width: 1024px; height: 600px">public void store(Map<String, Object> m, String key, Object value) {
+        if (value instanceof Number) {
+                value = String.valueOf(value);  
+        }
+        else if (value instanceof Boolean) {
+                value = String.valueOf(value);
+        }
+        
+        m.put(key, value);
 }</div>
-				</section>
+                                    </section>
+                                </section>
+
 			</div>
 		</div>
 		
 		<script src="ace.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-			var editor = ace.edit("editor");
+			var editor = ace.edit("editor3");
 			editor.setTheme("ace/theme/ambiance");
 			editor.getSession().setMode("ace/mode/java");
 			editor.renderer.setShowGutter(false);
