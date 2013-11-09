@@ -59,9 +59,9 @@
                                     <section>
                                         <h2>Problemas de los arrays</h2>
                                         <ul>
-                                            <li>Contravariantes en asignación</li>
-                                            <li>Covariantes en los elementos</li>
-                                            <li>Motivaciones históricas anteriores a los genéricos</li>
+                                            <li class="fragment">Contravariantes en asignación</li>
+                                            <li class="fragment">Covariantes en los elementos</li>
+                                            <li class="fragment">Motivaciones históricas anteriores a los genéricos</li>
                                         </ul>
                                     </section>
                                     <section>
@@ -86,12 +86,39 @@ numeros[2] = 10l;
 System.out.println(Arrays.toString(numeros));</div>
                                     </section>
                                     <section>
-                                        <div class="overcode">Lo que nos lleva a la siguiente situación... que compila perfectamente </div>
-                                        <div id="editor3" class="editor">String[] strings = {"a", "b", "c"};
+                                        <div class="overcode"><p>Lo que nos lleva a la siguiente situación... que compila perfectamente</p>
+                                            <p class="fragment roll-in">pero que falla en Runtime!!</p> </div>
+                                        <div id="editor" class="editor">String[] strings = {"a", "b", "c"};
 
 Object[] objects = strings;
 
 objects[2] = 10; // !!!</div>
+                                    </section>
+                                    <section>Para conseguir este comportamiento los arrays en java llevan un <i>tag</i> en runtime con el tipo que contienen para conseguir que funcionen, ya que en tiempo de compilación no se puede garantizar el funcionamiento</section>
+                                    <section>Pero ahora tenemos...
+                                        <h1 class="fragment">Generics!!!</h1>
+                                        <img class="fragment" src="parameterize_all_the_types.jpg" style="width: 640px">
+                                    </section>
+                                    <section>
+                                    <div class="overcode">Así que ahora podemos usar genéricos para parametrizar nuestra función anterior</div>
+                                        <div id="editor3" class="editor">public static &ltT&gt boolean binarySearch(T[] haystack, T needle) {
+    //Put the magic here...
+}</div>
+                                    </section>
+                                    <section>
+                                        <h1>según la
+                                            <a href="http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)#Covariant_arrays_in_Java_and_C.23">Wikipedia</a>
+                                        </h1>
+                                    </section>
+                                    <section>
+                                        <div>
+                                            <h1>pero... ¿Esto va a funcionar?</h1>
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <h1>No</h1>
+                                        <h2 class="fragment">No sirve para nada en realidad</h2>
+                                        <h3 class="fragment">Al menos sin hacer alguna cosa más</h3>
                                     </section>
                                 </section>
                                 <section>
@@ -124,7 +151,7 @@ objects[2] = 10; // !!!</div>
     		 bindKey: {win: 'Ctrl-E',  mac: 'Command-E'},
     		 exec: function(editor) {
 			 	$.ajax({
-					url: 'http://localhost:8000/execute',
+					url: 'http://localhost:51081/execute',
 					type: 'POST',
 					data: {expression: editor.getValue()},
 					success: function(e) {
