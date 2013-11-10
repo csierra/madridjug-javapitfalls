@@ -23,7 +23,6 @@
 			}
 			section div.editor { 
 				position: absolute;
-				top: 0;
 				right: 0;
 				bottom: 0;
 				left: -100px;
@@ -34,6 +33,10 @@
                                 width: 1024px;
                                 margin-left: 60px;
 
+                        }
+                        section div.editor-whole {
+                           top: -300px; 
+                           height: 700px;
                         }
                         section div.overcode {
                             margin-top: -200px;
@@ -101,7 +104,7 @@ objects[2] = 10; // !!!</div>
                                     </section>
                                     <section>
                                     <div class="overcode">Así que ahora podemos usar genéricos para parametrizar nuestra función anterior</div>
-                                        <div id="editor3" class="editor">public static &ltT&gt boolean binarySearch(T[] haystack, T needle) {
+                                        <div id="editor" class="editor">public static &ltT&gt boolean binarySearch(T[] haystack, T needle) {
     //Put the magic here...
 }</div>
                                     </section>
@@ -120,19 +123,69 @@ objects[2] = 10; // !!!</div>
                                         <h2 class="fragment">No sirve para nada en realidad</h2>
                                         <h3 class="fragment">Al menos sin hacer alguna cosa más</h3>
                                     </section>
+                                    <section>
+                                    <div class="overcode fragment fade-out">
+                                        <p >Esto funciona porque los contenedores genéricos en Java no son variantes</p>
+                                    </div>
+                                    <div class="overcode fragment">
+                                        <p >Parece ser el motivo de que Class&lt;?&gt; se hiciera parametrizable, servir de <i>puente</i>
+                                        para que compilador y runtime pudieran funcionar <i>de forma segura</i></p>
+                                    </div>
+
+                                    <div id="editor" class="editor">public static &ltT&gt boolean binarySearch(
+    Class&lt;T&gt; klazz, T[] haystack, T needle) {
+    //Put the magic here...
+}</div>
+                                    </section>
+                                    <section>
+                                        <div class="overcode fragment fade-out">También podemos conseguir el mismo efecto si nuestros métodos forman parte de una clase parametrizada</div>
+                                        <div class="overcode fragment">pero claro... tenemos que instanciarla</div>
+                                        <div id="editor" class="editor">public class Searcher[T] {
+    public boolean binarySearch(T[] haystack, T needle) {
+        // The code here
+    }
+    
+    public static void main(String args[]) {
+        new Searcher&lt;String&gt;().binarySearch({"a", "b"}, "c");
+    }
+}</div>
+                                    </section>
                                 </section>
                                 <section>
                                     <section>
-                                        <div id="editor4" style="width: 1024px; height: 600px">public void store(Map<String, Object> m, String key, Object value) {
+                                        <div id="editor" class="editor editor-whole" >public void store(Map<String, Object> m, String key, Object value) {
         if (value instanceof Number) {
                 value = String.valueOf(value);  
         }
         else if (value instanceof Boolean) {
                 value = String.valueOf(value);
-        }
-        
+        }!P!2
+
         m.put(key, value);
 }</div>
+                                    </section>
+                                    <section>
+                                        <div id="editor3" class="editor editor-whole">public void store(Map m, String key, Number value) {
+    m.put(key, String.valueOf(value));
+}
+    
+public void store(Map m, String key, Boolean value) {
+        m.put(key, String.valueOf(value));
+}
+
+public void store(Map m, String key, Object value) {
+        m.put(key, value);
+}</div>
+                                    </section>
+                                    <section>
+                                        <h1><p>¿Son</p></h1><h2><p>equivalentes?</p></h2>
+                                    </section>
+                                    <section>
+                                        <h1>NO</h1>
+                                    </section>
+                                    <section>
+                                        <p>En java la resolución de los métodos en función de los parámetros se hace en tiempo de compilación</p>
+                                        <p class="fragment">El único dinamismo que existe es solo sobre <i>this</i></p>
                                     </section>
                                 </section>
 
