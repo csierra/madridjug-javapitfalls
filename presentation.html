@@ -165,7 +165,7 @@ objects[2] = 10; // !!!</div>
 }</div>
                                     </section>
                                     <section>
-                                        <div id="editor3" class="editor editor-whole">public void store(Map m, String key, Number value) {
+                                        <div id="editor" class="editor editor-whole">public void store(Map m, String key, Number value) {
     m.put(key, String.valueOf(value));
 }
     
@@ -181,14 +181,71 @@ public void store(Map m, String key, Object value) {
                                         <h1><p>¿Son</p></h1><h2><p>equivalentes?</p></h2>
                                     </section>
                                     <section>
-                                        <h1>NO</h1>
+                                        <div id="editor" class="editor editor-whole">public static void main(String[] args) {
+    List&lt;Object&gt; l = new ArrayList&lt;Object&gt;();
+    l.add(2);
+    l.add(true);
+    l.add("hola mundo");
+        
+    for (Object object : l) {
+            print(object);
+    }
+}</div>
                                     </section>
                                     <section>
                                         <p>En java la resolución de los métodos en función de los parámetros se hace en tiempo de compilación</p>
-                                        <p class="fragment">El único dinamismo que existe es solo sobre <i>this</i></p>
+                                        <p class="fragment">Sólo se comprueba en runtime el tipo del objeto <i>this</i></p>
+                                        <p class="fragment">Se conoce como <i>single dispatch</i></p>
+                                        <p class="fragment">Java, C++, C# (&lt; 4.0 aparentemente) y Smalltalk, entre otros, tienen single dispatch</p>
+                                    </section>
+                                    <section>
+                                        <h2>Patrón visitor</h2>
+                                        <p>Es una manera de hacer <i>double dispath</i></p>
+                                        <p class="fragment">Para implementarlo correctamente es necesario que todas las clases <i>visitables</i> implementen el método accept</p>
+                                        <p class="fragment">Esta es la única manera de usar siempre la implementación más concreta</p>
                                     </section>
                                 </section>
-
+                                <section>
+                                    <section>
+                                        <h2>¿Cómo matar un hilo?</h2>
+                                        <h3>(To kill a running thread)</h3>
+                                    </section>
+                                    <section>
+                                        <h2>Respuesta corta</h2>
+                                        <h3 class="fragment">No se puede :(</h3>
+                                    </section>
+                                    <section>
+                                        <h2>Respuesta larga</h2>
+                                        <p class="fragment">Debemos programar el código de manera que se pueda <i>señalizar</i> al hilo la parada</p>
+                                        <p class="fragment">Tenemos que tener cuidado con código <i>genérico</i> que, de repente, ponemos a ejecutar dentro de hilos de forma transparente sin que el código esté preparado</p>
+                                    </section>
+                                    <section>
+                                        <h2>
+                                            pero... pero... ¿Qué pasa con Thread.stop() y Thread.interrupt()?
+                                        </h2>
+                                    </section>
+                                    <section>
+                                        <p>Thread.stop() está deprecado y no debe usarse</p>
+                                        <p class="fragments">Básicamente generaba una excepción ThreadDeath en el stack del hilo sobre el que se llamaba</p>
+                                        <p class="fragment">Puede convertir cerrar los recursos correctamente en una tarea imposible</p>
+                                        <p class="fragment">Además de que el código descuidado o mal hecho podía capturar la excepción e inutilizarla</p>
+                                    </section>
+                                    <section>
+                                        <p><i>Thread.interrupt()</i> es lo que hay que utilizar</p>
+                                        <p class="fragment">Sin embargo los hilos tienen que estar en estados interrumpibles para poder ser interrumpidos</p>
+                                        <div id="editor3" class="editor">Object object = new Object();
+		
+synchronized (object) {
+    try {
+            object.wait();
+    } catch (InterruptedException e) {
+        //Cerrar los recursos y salir de la ejecución
+    }
+        
+}</div>
+                                    </section>
+                                </section>
+                        
 			</div>
 		</div>
 		
