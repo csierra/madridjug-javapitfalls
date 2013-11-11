@@ -1,1 +1,0 @@
-../ace-builds/src-noconflict/mode-haskell.js
