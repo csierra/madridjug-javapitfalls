@@ -163,7 +163,7 @@ objects[2] = 10; // !!!</div>
         }
         else if (value instanceof Boolean) {
                 value = String.valueOf(value);
-        }!P!2
+        }
 
         m.put(key, value);
 }</div>
@@ -242,19 +242,20 @@ public void store(Map m, String key, Object value) {
                                         <p>Para esto podemos usar <i>Thread.interrupt()</i></p>
 					<p class="fragment">Pone el estado del hilo a <i>interrumpido</i> de forma segura</p>
 					<p class="fragment">Podemos consultarlo usando <i>Thread.interrupted()</i>, que nos devuelve si el hilo ha sido interrumpido y lo devuelve al estado original</p>
-									</section>
-									<section>
-										<p class="fragment"><i>Thread.interrupt()</i> también puede generar excepciones que interrumpen el flujo de ejecución inmediatamente</p>
-                                        <p class="fragment">Sin embargo los hilos tienen que estar en estados <i>interrumpibles</i> para poder ser interrumpidos</p>
+			    	    </section>
+				    <section>
+                                        <div class="overcode">
+                                            <p><i>Thread.interrupt()</i> también puede generar excepciones que interrumpen el flujo de ejecución inmediatamente</p>
+                                            <p class="fragment">Sin embargo los hilos tienen que estar en estados <i>interrumpibles</i> para poder ser interrumpidos</p>
+                                        </div>
                                         <div id="editor" class="editor">Object object = new Object();
 		
 synchronized (object) {
     try {
-            object.wait();
+        object.wait();
     } catch (InterruptedException e) {
         //Cerrar los recursos y salir de la ejecución
     }
-        
 }</div>
                                     </section>
 									<section>
@@ -346,15 +347,25 @@ catch(InterruptedException ie) {
 }</div>
 									</section>
 									<section>
-											<div class="overcode"><p><ul>
-        										<li>Tenemos que usar volatile para conseguir la sincronización correcta</li>
-											</ul></p></div>
-									        <div id="editor3" class="editor">private volatile Singleton instance;</div>
+									        <div id="editor" class="editor editor-whole">private volatile Singleton instance;
+                                                                                    
+public static Singleton getInstance() {
+    if (instance == null) {
+            synchronized(this) {
+                    if (instance == null) {
+                            instance = new Singleton();
+                    }
+            }
+    }
+
+    return instance;
+}</div>
 									</section>
 									<section>
-									        <div class="overcode">
-									                <h3>Initialization on demand holder</h3>
-													<div id="editor" class="editor">public class Singleton {
+									        <h3>Initialization on demand holder</h3>
+                                                                        </section>
+                                                                        <section>
+									    <div id="editor" class="editor editor-whole">public class Singleton {
         private Singleton() {}
  
         private static class LazyHolder {
@@ -365,7 +376,6 @@ catch(InterruptedException ie) {
                 return LazyHolder.INSTANCE;
         }
 }</div>
-									        </div>
 									</section>
 									<section>
 									        <div>
@@ -386,26 +396,6 @@ catch(InterruptedException ie) {
 		
 		<script src="ace.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-			var editor = ace.edit("editor3");
-			editor.setTheme("ace/theme/ambiance");
-			editor.getSession().setMode("ace/mode/java");
-			editor.renderer.setShowGutter(false);
-			editor.setHighlightActiveLine(false);
-			editor.commands.addCommand({
-   			 name: 'exec',
-    		 bindKey: {win: 'Ctrl-E',  mac: 'Command-E'},
-    		 exec: function(editor) {
-			 	$.ajax({
-					url: 'http://localhost:51081/execute',
-					type: 'POST',
-					data: {expression: editor.getValue()},
-					success: function(e) {
-						debugger;
-					}
-			 })
-    		},
-    		readOnly: true // false if this command should not apply in readOnly mode
-			});
 		</script>
 
 		<script src="lib/js/head.min.js"></script>
@@ -434,6 +424,31 @@ catch(InterruptedException ie) {
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
+
+                        Reveal.addEventListener( 'slidechanged', function( event ) {
+                            $(event.currentSlide).find('div.editor').get().forEach(function(it) {
+                                var editor = ace.edit(it);
+                                editor.setTheme("ace/theme/ambiance");
+                                editor.getSession().setMode("ace/mode/java");
+                                editor.renderer.setShowGutter(false);
+                                editor.setHighlightActiveLine(false);
+                                editor.commands.addCommand({
+                                 name: 'exec',
+                                 bindKey: {win: 'Ctrl-E',  mac: 'Command-E'},
+                                 exec: function(editor) {
+                                                $.ajax({
+                                                        url: 'http://localhost:51081/execute',
+                                                        type: 'POST',
+                                                        data: {expression: editor.getValue()},
+                                                        success: function(e) {
+                                                                debugger;
+                                                        }
+                                         })
+                                },
+                                readOnly: true // false if this command should not apply in readOnly mode
+                                });
+                            } );
+                        });
 
 		</script>
 
