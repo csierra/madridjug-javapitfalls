@@ -25,22 +25,26 @@
 				position: absolute;
 				right: 0;
 				bottom: 0;
+				top: 0;
 				left: -100px;
 				text-align: left;
 				font-family: monospace;
-                                font-size: 30px;
-                                height: 400px;
-                                width: 1024px;
-                                margin-left: 60px;
+                font-size: 30px;
+                height: 400px;
+                width: 1024px;
+                margin-left: 60px;
 
-                        }
-                        section div.editor-whole {
-                           top: -300px; 
-                           height: 700px;
-                        }
-                        section div.overcode {
-                            margin-top: -200px;
-                        }
+			}
+			section p {
+				text-align: left;
+			}
+			section div.editor-whole {
+				top: -300px; 
+				height: 700px;
+			}
+			section div.overcode {
+				margin-top: -200px;
+			}
 		</style>
 
 		<!--[if lt IE 9]>
@@ -287,7 +291,7 @@ catch(InterruptedException ie) {
 </div>
 									</section>
 									<section>
-									        <div id="editor3" class="editor editor-whole">public class Singleton {
+									        <div id="editor" class="editor editor-whole">public class Singleton {
     
     private Singleton instance = null;
     
@@ -303,7 +307,77 @@ catch(InterruptedException ie) {
     }
 }</div>
 									</section>
-									
+									<section>
+									        <h2>Lo malo es que esto no es multihilo</h2>
+											<p class="fragment">A partir de aquí se complica la cosa</p>
+									</section>
+									<section>
+									        <div class="overcode fragment"><p>Con esto serializamos el acceso aunque la instancia esté creada ya, con lo que no es muy recomendable</p></div>
+											<div id="editor" class="editor">synchronized public static Singleton getInstance() {
+		if (instance == null) {
+			instance = new Singleton();
+		}
+
+		return instance;
+}</div>
+									</section>
+									<section>
+									        <div id="editor" class="editor editor-whole">public static Singleton getInstance() {
+		if (instance == null) {
+			synchronized(this) {
+				instance = new Singleton();
+			}
+		}
+
+		return instance;
+}</div>
+									</section>
+									<section>
+									        <div id="editor" class="editor editor-whole">public static Singleton getInstance() {
+		if (instance == null) {
+			synchronized(this) {
+				if (instance == null) {
+					instance = new Singleton();
+				}
+			}
+		}
+
+		return instance;
+}</div>
+									</section>
+									<section>
+											<div class="overcode"><p><ul>
+        										<li>Tenemos que usar volatile para conseguir la sincronización correcta</li>
+											</ul></p></div>
+									        <div id="editor3" class="editor">private volatile Singleton instance;</div>
+									</section>
+									<section>
+									        <div class="overcode">
+									                <h3>Initialization on demand holder</h3>
+													<div id="editor" class="editor">public class Singleton {
+        private Singleton() {}
+ 
+        private static class LazyHolder {
+                private static final Singleton INSTANCE = new Singleton();
+        }
+ 
+        public static Singleton getInstance() {
+                return LazyHolder.INSTANCE;
+        }
+}</div>
+									        </div>
+									</section>
+									<section>
+									        <div>
+									                <ul>
+									                        <li>El código es mucho más conciso</li>
+									                        <li class="fragment">Es <i>threadsafe</i></li>
+									                        <li class="fragment">Es <i>lazy</i></li>
+									                        <li class="fragment">La principal pega es que no se pueden controlar errores en la inicialización apropiadamente</li>
+									                </ul>
+									        </div>
+									</section>
+
 								</section>
 
                          
