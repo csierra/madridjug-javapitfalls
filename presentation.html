@@ -230,10 +230,19 @@ public void store(Map m, String key, Object value) {
                                         <p class="fragment">Puede convertir cerrar los recursos correctamente en una tarea imposible</p>
                                         <p class="fragment">Además de que el código descuidado o mal hecho podía capturar la excepción e inutilizarla</p>
                                     </section>
+				    <section>
+				    	<p>Lo recomendado es utilizar un flag para señalizar la parada del hilo.</p>
+					<p class="fragment">El problema de esta aproximación es hacer la sincronización correctamente</p>
+				    </section>
                                     <section>
-                                        <p><i>Thread.interrupt()</i> es lo que hay que utilizar</p>
-                                        <p class="fragment">Sin embargo los hilos tienen que estar en estados interrumpibles para poder ser interrumpidos</p>
-                                        <div id="editor3" class="editor">Object object = new Object();
+                                        <p>Para esto podemos usar <i>Thread.interrupt()</i></p>
+					<p class="fragment">Pone el estado del hilo a <i>interrumpido</i> de forma segura</p>
+					<p class="fragment">Podemos consultarlo usando <i>Thread.interrupted()</i>, que nos devuelve si el hilo ha sido interrumpido y lo devuelve al estado original</p>
+									</section>
+									<section>
+										<p class="fragment"><i>Thread.interrupt()</i> también puede generar excepciones que interrumpen el flujo de ejecución inmediatamente</p>
+                                        <p class="fragment">Sin embargo los hilos tienen que estar en estados <i>interrumpibles</i> para poder ser interrumpidos</p>
+                                        <div id="editor" class="editor">Object object = new Object();
 		
 synchronized (object) {
     try {
@@ -244,8 +253,60 @@ synchronized (object) {
         
 }</div>
                                     </section>
-                                </section>
-                        
+									<section>
+									        <p>Básicamente estos <i>estados</i> son acciones que hacen <i>polling</i> periódico sobre <i>Thread.interrupted()</i> y lanzan <i>InterruptedException</i></p>
+											<p class="fragment">No todas las llamadas bloqueantes se pueden <i>desbloquear</i> usando <i>Thread.interrupt()</i></p>
+											<p class="fragment">Un ejemplo claro son las llamadas a sistema como <i>read</i></p>
+											<p class="fragment">Con lo que es recomendable utilizar <i>timeouts</i> sensatos y comprobar el estado del hilo periódicamente en las llamadas bloqueantes</p>
+									</section>
+									<section>
+									        <div id="editor" class="editor editor-whole">try {
+	while (true) {
+
+	byte[] buffer = resource.read(100L); //Leer durante 100ms
+
+	//trabaja si puedes
+    
+	if (Thread.interrupted()) {
+		throw new InterruptedException();
+	}
+}
+catch(InterruptedException ie) {
+	//Clear resources	
+}</div>
+									</section>
+								</section>
+								<section>
+									<section>
+								        <h3>Inicialización tardía de <i>Singletons</i></h3>
+									</section>
+									<section>
+									        <div id="editor" class="editor editor-whole">public class Singleton {
+
+}
+</div>
+									</section>
+									<section>
+									        <div id="editor3" class="editor editor-whole">public class Singleton {
+    
+    private Singleton instance = null;
+    
+    private Singleton() {
+    }
+    
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        
+        return instance;
+    }
+}</div>
+									</section>
+									
+								</section>
+
+                         
 			</div>
 		</div>
 		
