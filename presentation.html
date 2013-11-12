@@ -18,32 +18,35 @@
 		</script>
 		<script src="jquery-2.0.3.js"></script>
 		<style type="text/css" media="screen">
-			#editor .ace_cursor {
-				border-left: 4px white solid;
-			}
+			.ace_cursor {
+                border-left: 2px white solid;
+            }
+
+            section div.ace_content {
+                width: 960px;
+            }
+
 			section div.editor { 
-				position: absolute;
-				right: 0;
-				bottom: 0;
-				top: 0;
-				left: -100px;
-				text-align: left;
-				font-family: monospace;
-                font-size: 30px;
-                height: 400px;
-                width: 1024px;
-                margin-left: 60px;
+                            position: absolute;
+                            right: 0;
+                            bottom: 0;
+                            top: 0;
+                            text-align: left;
+                            font-family: monospace;
+                            font-size: 28px;
+                            height: 400px;
+                            width: 960px;
 
 			}
-			section p {
-				text-align: left;
+			section {
+                            font-family: Ubuntu;
 			}
 			section div.editor-whole {
-				top: -300px; 
-				height: 700px;
+                            top: -300px; 
+                            height: 700px;
 			}
 			section div.overcode {
-				margin-top: -200px;
+                            margin-top: -200px;
 			}
 		</style>
 
@@ -59,10 +62,35 @@
 			<div class="slides">
 				<section data-background="java%20tripping%20hazard.png" data-background-size="70%"></section>
                                 <section>
-                                <section>
-                                    <h1>Varianza en arrays</h1>
-                                
+                                    <section>
+                                        <h2>Motivaciones</h2>
                                     </section>
+                                    <section>
+                                        <h2>Es relativamente fácil encontrar información y ayuda para programadores noveles</h2>
+                                    </section>
+                                    <section>
+                                        <h2>¿Pero qué hay de la gente que tenemos experiencia ya en esto?</h2>
+                                    </section>
+                                    <section>
+                                        <h2>Esta charla no va a tratar sobre ningún producto nuevo...</h2>
+                                    </section>
+                                    <section>
+                                        <h2>sino sobre los errores y fallos que cometemos una y otra vez.</h2>
+                                    </section>
+                                    <section>
+                                        <h2>No porque no seamos buenos desarrolladores, creo...</h2>
+                                    </section>
+                                    <section>
+                                        <h2>sino porque no podemos habernos encontrado con todo</h2>
+                                    </section>
+                                    <section>
+                                        <h2>muchas veces utilizamos diferentes lenguajes de programación</h2>
+                                    </section>
+                                    <section>
+                                        <h2>y hay muchas cosas que no son precisamente intuitivas</h2>
+                                    </section>
+                                </section>
+                                <section>
                                     <section>
                                         <h2>Problemas de los arrays</h2>
                                         <ul>
@@ -72,8 +100,8 @@
                                         </ul>
                                     </section>
                                     <section>
-                                    <div class="overcode">Para poder hacer funciones que trabajaran genéricamente sobre los arrays cualquier tipo de array debía ser asignable a Object[]</div>
-                                    <div class="editor">public static boolean binarySearch(Object[] haystack, Object needle) {
+                                        <div class="overcode">Para poder hacer funciones que trabajaran genéricamente sobre los arrays cualquier tipo de array debía ser asignable a Object[]</div>
+                                        <div class="editor">public static boolean binarySearch(Object[] haystack, Object needle) {
     // ... aquí magia
 }
 
@@ -119,7 +147,7 @@ objects[2] = 10; // !!!</div>
                                     </section>
                                     <section>
                                         <div>
-                                            <h1>pero... ¿Esto va a funcionar?</h1>
+                                            <h1>pero...<br> ¿Esto va a funcionar?</h1>
                                         </div>
                                     </section>
                                     <section>
@@ -197,16 +225,20 @@ public void store(Map m, String key, Object value) {
 }</div>
                                     </section>
                                     <section>
-                                        <p>En java la resolución de los métodos en función de los parámetros se hace en tiempo de compilación</p>
-                                        <p class="fragment">Sólo se comprueba en runtime el tipo del objeto <i>this</i></p>
-                                        <p class="fragment">Se conoce como <i>single dispatch</i></p>
-                                        <p class="fragment">Java, C++, C# (&lt; 4.0 aparentemente) y Smalltalk, entre otros, tienen single dispatch</p>
+                                        <ul>
+                                            <li>En java la resolución de los métodos en función de los parámetros se hace en tiempo de compilación</li>
+                                            <li class="fragment">Sólo se comprueba en runtime el tipo del objeto <i>this</i></li>
+                                            <li class="fragment">Se conoce como <i>single dispatch</i></li>
+                                            <li class="fragment">Java, C++, C# (&lt; 4.0 aparentemente) y Smalltalk, entre otros, tienen single dispatch</li>
+                                        </ul>
                                     </section>
                                     <section>
                                         <h2>Patrón visitor</h2>
-                                        <p>Es una manera de hacer <i>double dispath</i></p>
-                                        <p class="fragment">Para implementarlo correctamente es necesario que todas las clases <i>visitables</i> implementen el método accept</p>
-                                        <p class="fragment">Esta es la única manera de usar siempre la implementación más concreta</p>
+                                        <ul>
+                                            <li>Es una manera de hacer <i>double dispath</i></li>
+                                            <li class="fragment">Para implementarlo correctamente es necesario que todas las clases <i>visitables</i> implementen el método accept</li>
+                                            <li class="fragment">Esta es la única manera de usar siempre la implementación más concreta</li>
+                                        </ul>
                                     </section>
                                 </section>
                                 <section>
@@ -225,23 +257,29 @@ public void store(Map m, String key, Object value) {
                                     </section>
                                     <section>
                                         <h2>
-                                            pero... pero... ¿Qué pasa con Thread.stop() y Thread.interrupt()?
+                                            pero... pero... <br>¿Qué pasa con Thread.stop() y Thread.interrupt()?
                                         </h2>
                                     </section>
                                     <section>
-                                        <p>Thread.stop() está deprecado y no debe usarse</p>
-                                        <p class="fragments">Básicamente generaba una excepción ThreadDeath en el stack del hilo sobre el que se llamaba</p>
-                                        <p class="fragment">Puede convertir cerrar los recursos correctamente en una tarea imposible</p>
-                                        <p class="fragment">Además de que el código descuidado o mal hecho podía capturar la excepción e inutilizarla</p>
+                                        <ul>
+                                            <li>Thread.stop() está deprecado y no debe usarse.</li>
+                                            <li class="fragment">Básicamente generaba una excepción ThreadDeath en el stack del hilo sobre el que se llamaba.</li>
+                                            <li class="fragment">Puede convertir cerrar los recursos correctamente en una tarea imposible.</li>
+                                            <li class="fragment">Además de que el código descuidado o mal hecho podía capturar la excepción e inutilizarla.</li>
+                                        </ul>
                                     </section>
 				    <section>
-				    	<p>Lo recomendado es utilizar un flag para señalizar la parada del hilo.</p>
-					<p class="fragment">El problema de esta aproximación es hacer la sincronización correctamente</p>
+                                        <ul>
+                                            <li>Lo recomendado es utilizar un flag para señalizar la parada del hilo.</li>
+                                            <li class="fragment">El problema de esta aproximación es hacer la sincronización correctamente.</li>
+                                        </ul>
 				    </section>
                                     <section>
-                                        <p>Para esto podemos usar <i>Thread.interrupt()</i></p>
-					<p class="fragment">Pone el estado del hilo a <i>interrumpido</i> de forma segura</p>
-					<p class="fragment">Podemos consultarlo usando <i>Thread.interrupted()</i>, que nos devuelve si el hilo ha sido interrumpido y lo devuelve al estado original</p>
+                                        <ul>
+                                            <li>Para esto podemos usar <i>Thread.interrupt()</i></li>
+                                            <li class="fragment">Pone el estado del hilo a <i>interrumpido</i> de forma segura</li>
+                                            <li class="fragment">Podemos consultarlo usando <i>Thread.interrupted()</i>, que nos devuelve si el hilo ha sido interrumpido y lo devuelve al estado original</li>
+                                        </ul>
 			    	    </section>
 				    <section>
                                         <div class="overcode">
@@ -258,30 +296,34 @@ synchronized (object) {
     }
 }</div>
                                     </section>
-									<section>
-									        <p>Básicamente estos <i>estados</i> son acciones que hacen <i>polling</i> periódico sobre <i>Thread.interrupted()</i> y lanzan <i>InterruptedException</i></p>
-											<p class="fragment">No todas las llamadas bloqueantes se pueden <i>desbloquear</i> usando <i>Thread.interrupt()</i></p>
-											<p class="fragment">Un ejemplo claro son las llamadas a sistema como <i>read</i></p>
-											<p class="fragment">Con lo que es recomendable utilizar <i>timeouts</i> sensatos y comprobar el estado del hilo periódicamente en las llamadas bloqueantes</p>
-									</section>
-									<section>
-									        <div id="editor" class="editor editor-whole">try {
-	while (true) {
+                                                        <section>
+                                                            <ul>
+                                                                <li>Básicamente estos <i>estados</i> son acciones que hacen <i>polling</i> periódico sobre <i>Thread.interrupted()</i> y lanzan <i>InterruptedException</i></li>
+                                                                <li class="fragment">No todas las llamadas bloqueantes se pueden <i>desbloquear</i> usando <i>Thread.interrupt()</i></li>
+                                                                <li class="fragment">Un ejemplo claro son las llamadas a sistema como <i>read</i></li>
+                                                                <li class="fragment">Con lo que es recomendable utilizar <i>timeouts</i> sensatos y comprobar el estado del hilo periódicamente en las llamadas bloqueantes</li>
+                                                            </ul>
+                                                        </section>
+                                                        <section>
+                                                                <div id="editor" class="editor editor-whole">try {
+    while (true) {
 
-	byte[] buffer = resource.read(100L); //Leer durante 100ms
+        byte[] buffer = resource.read(100L); //Leer durante 100ms
 
-	//trabaja si puedes
-    
-	if (Thread.interrupted()) {
-		throw new InterruptedException();
-	}
-}
-catch(InterruptedException ie) {
-	//Clear resources	
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
+        }
+
+        //trabaja si puedes
+
+    }
+    catch(InterruptedException ie) {
+        //Clear resources	
+    }
 }</div>
-									</section>
-								</section>
-								<section>
+                                                        </section>
+                                                </section>
+                                                <section>
 									<section>
 								        <h3>Inicialización tardía de <i>Singletons</i></h3>
 									</section>
@@ -294,7 +336,7 @@ catch(InterruptedException ie) {
 									<section>
 									        <div id="editor" class="editor editor-whole">public class Singleton {
     
-    private Singleton instance = null;
+    private static Singleton instance = null;
     
     private Singleton() {
     }
@@ -313,7 +355,7 @@ catch(InterruptedException ie) {
 											<p class="fragment">A partir de aquí se complica la cosa</p>
 									</section>
 									<section>
-									        <div class="overcode fragment"><p>Con esto serializamos el acceso aunque la instancia esté creada ya, con lo que no es muy recomendable</p></div>
+									        <div class="overcode fragment"><p>Con esto serializamos el acceso aunque la instancia esté creada ya, lo que no es muy recomendable</p></div>
 											<div id="editor" class="editor">synchronized public static Singleton getInstance() {
 		if (instance == null) {
 			instance = new Singleton();
@@ -325,7 +367,7 @@ catch(InterruptedException ie) {
 									<section>
 									        <div id="editor" class="editor editor-whole">public static Singleton getInstance() {
 		if (instance == null) {
-			synchronized(this) {
+			synchronized(Singleton.class) {
 				instance = new Singleton();
 			}
 		}
@@ -347,7 +389,7 @@ catch(InterruptedException ie) {
 }</div>
 									</section>
 									<section>
-									        <div id="editor" class="editor editor-whole">private volatile Singleton instance;
+									        <div id="editor" class="editor editor-whole">private static volatile Singleton instance;
                                                                                     
 public static Singleton getInstance() {
     if (instance == null) {
