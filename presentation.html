@@ -378,7 +378,7 @@ synchronized (object) {
 									<section>
 									        <div id="editor" class="editor editor-whole">public static Singleton getInstance() {
 		if (instance == null) {
-			synchronized(this) {
+			synchronized(Singleton.class) {
 				if (instance == null) {
 					instance = new Singleton();
 				}
